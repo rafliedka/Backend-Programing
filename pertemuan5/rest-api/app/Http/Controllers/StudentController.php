@@ -58,6 +58,17 @@ class StudentController extends Controller
     }
 
     public function destroy(Request $request, $id){
-        //
+        
+        // echo "menghapus data : $id";
+        
+        $student = Student::find($id);
+        $student->delete();
+
+        $data = [
+            'message' => 'student data has been delete',
+            'data' => $student
+        ];
+
+        return response()->json($data, 201);
     }
 }
