@@ -38,31 +38,43 @@ class StudentController extends Controller
     }
 
     public function update(Request $request, $id){
-        
-        // echo "mengupdate data student : $id";
-        
+
         $student = Student::find($id);
 
-        $student->name = $request->name;
-        $student->nim = $request->nim;
-        $student->email = $request->email;
-        $student->jurusan = $request->jurusan;
-        $student->save();
+        if($student){
 
-        $data = [
-            'message' => 'student data has been update',
-            'data' => $student
-        ];
+            $input = [
+                'name' => $request->name ?? $student->nama,
+                'nim' => $request->nim ?? $student->nim,
+                'email' => $request->email ?? $student->email,
+                'jurusan' => $request->jurusan ?? $student->jurusan
+            ];
 
-        return response()->json($data, 201);
+            $student->update($input);
+
+            $data = [
+                'message' => 'Student data has been updated',
+                'data' => $student
+            ];
+
+            return response()->json($data);
+        }
+
+        else {
+            $data = [
+                'message' => 'Student not found',
+            ];
+
+            return response()->json($data);
+        }
     }
 
     public function destroy(Request $request, $id){
         
-        // echo "menghapus data : $id";
-        
         $student = Student::find($id);
-        $student->delete();
+
+        if($student){
+            $student->delete();
 
         $data = [
             'message' => 'student data has been delete',
@@ -70,5 +82,17 @@ class StudentController extends Controller
         ];
 
         return response()->json($data, 201);
+        }
+
+        else{
+            $data =[
+                'message' => 'student data not found'
+            ];
+              
+            return response()->json($data);
+        }
+        
+        
+        
     }
 }
