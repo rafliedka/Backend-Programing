@@ -19,21 +19,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//membuat method get route /pasiens
+//membuat route request get dengan endpoint /pasiens
 Route::get('/pasiens', [PasienController::class, 'index']);
 
-//membuat method get route /pasiens/id
+//membuat route request get dengan endpoint /pasiens/id
 Route::get('/pasiens/{id}', [PasienController::class, 'show']);
 
+//membuat route request get dengan endpoint /pasiens/status/status
 Route::get('/pasiens/status/{status}', [PasienController::class, 'getStatus']);
 
+//membuat route request get dengan endpoint /pasiens/search/nama
 Route::get('/pasiens/search/{name}', [PasienController::class, 'getName']);
 
-//membuat method post
+//membuat route request post dengan endpoint /pasiens
 Route::post('/pasiens', [PasienController::class, 'store']);
 
-//membuat method put
+//membuat route request put dengan endpoint /pasiens/id
 Route::put('/pasiens/{id}', [PasienController::class, 'update']);
 
-//membuat method delete
+//membuat route request delete dengan endpoint /pasiens/id
 Route::delete('/pasiens/{id}', [PasienController::class, 'destroy']);
