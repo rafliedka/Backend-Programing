@@ -80,12 +80,13 @@ class PasienController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    #membuat variable yang akan menampikan data pasien secara rinci
+    #membuat method yang akan menampikan data lengkap dari pasien tertentu
     public function show($id){
 
         //membuat variable pasien
         $pasien = Pasien::find($id);
         
+        //membuat kondisi jika data pasien ditemukan
         if ($pasien) {
             $data = [
                 'message' => 'Menampilkan data pasien',
@@ -94,6 +95,7 @@ class PasienController extends Controller
             return response()->json($data, 200);
         }
 
+        //kondisi dimana jika data pasien tidak ditemukan
         else {
             $data = [
                 'message' => 'Data pasien tidak ditemukan'
@@ -102,11 +104,13 @@ class PasienController extends Controller
         }
     }
 
-    #membuat variable yang akan menampikan data pasien dengan nama tertentu
+    #membuat method yang akan menampikan data pasien dengan nama tertentu
     public function getName($name){
 
+        //membuat variable pasien yang akan digunakan untuk mencari data pasien dengan nama/karakter tertentu
         $pasien = Pasien::where('name', 'Like', '%' . $name . '%')->get();
         
+        //membuat kondisi dimana jika ddata pasien yang dicari tidak ditemukan
         if (count($pasien) < 1) {
             $data = [
                 'message' => 'Data pasien tidak ditemukan'
@@ -114,6 +118,7 @@ class PasienController extends Controller
             return response()->json($data, 404);
         }
 
+        //membuat kondisi dimana jika data pasien yang dicari ditemukan
         else {
 
             $data = [
@@ -124,21 +129,24 @@ class PasienController extends Controller
         }
     }
 
-    #membuat variable yang akan menampikan data pasien dengan status tertentu
+    #membuat method yang akan menampikan data pasien dengan status tertentu
     public function getStatus($status){
 
-        //membuat variable pasien
+        //membuat variable pasien yang akan digunakan untuk mencari data dengan kunci status
         $pasien = Pasien::where("status", $status)->get();
         
+        //membuat kondisi dimana kunci yang dimasukan benar "positif"
         if ($status == "positif") {
             
+            //membuat kondisi didalam kondisi jika data yang dicari kosong
             if (count($pasien) < 1) {
                 $data = [
                     'message' => 'Data pasien tidak ditemukan'
                 ];
                 return response()->json($data, 404);
             }
-    
+            
+            //membuat kondisi didalam kondisi jika data yang dicari tersedia
             else {
     
                 $data = [
@@ -149,14 +157,18 @@ class PasienController extends Controller
             }
         }
 
+        //membuat kondisi dimana kunci yang dimasukan benar "sembuh"
         elseif ($status == "sembuh") {
+
+            //membuat kondisi didalam kondisi jika data yang dicari kosong
             if (count($pasien) < 1) {
                 $data = [
                     'message' => 'Data pasien tidak ditemukan'
                 ];
                 return response()->json($data, 404);
             }
-    
+            
+            //membuat kondisi didalam kondisi jika data yang dicari tersedia
             else {
     
                 $data = [
@@ -167,14 +179,18 @@ class PasienController extends Controller
             }
         }
 
+        //membuat kondisi dimana kunci yang dimasukan benar "meninggal"
         elseif ($status == "meninggal") {
+
+            //membuat kondisi didalam kondisi jika data yang dicari kosong
             if (count($pasien) < 1) {
                 $data = [
                     'message' => 'Data pasien tidak ditemukan'
                 ];
                 return response()->json($data, 404);
             }
-    
+            
+            //membuat kondisi didalam kondisi jika data yang dicari tersedia
             else {
     
                 $data = [
@@ -185,6 +201,7 @@ class PasienController extends Controller
             }
         }
 
+        //membuat kondisi dimana kunci yang dimasukan tidak benar/tidak tepat
         else {
             $data = [
                 'message' => 'Status tidak ditemukan / salah'
@@ -215,10 +232,13 @@ class PasienController extends Controller
     #membuat method update
     public function update(Request $request, $id){
 
+        //membuat variabel pasien yang akan digunakan untuk mencari id pasien
         $pasien = Pasien::find($id);
 
+        //membuat kondisi jika id pasien yang dicari ditemukan
         if($pasien){
 
+            //inputan akan diterima dan disimpan kedalam variable input
             $input = [
                 'name' => $request->name ?? $pasien->nama,
                 'phone' => $request->phone ?? $pasien->phone,
@@ -229,8 +249,10 @@ class PasienController extends Controller
                 
             ];
 
+            //lalu membuat property dengan menggunakan method update yang akan mengupdate data dari proprty input
             $pasien->update($input);
 
+            //membuat property yang aka menampilkan pesan jika data telah diupdate
             $data = [
                 'message' => 'Data pasien telah diupdate',
                 'data' => $pasien
@@ -239,6 +261,7 @@ class PasienController extends Controller
             return response()->json($data, 201);
         }
 
+        //kondisi kedua dimana data yang dicari tidak ditemukan
         else {
             $data = [
                 'message' => 'Id Pasien tidak ditemukan',
@@ -255,22 +278,28 @@ class PasienController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-     #membuat method destroy
+     #membuat method destroy untuk menghapus data pasien tertentu
     public function destroy(Request $request, $id){
         
+        //membuat property untuk menemukan id yang dicari
         $pasien = Pasien::find($id);
 
+        //membuat kondisi dimana jika id pasien yang dicari ditemukan maka
         if($pasien){
+
+            //data pasien tersebut akan di hapus dengan method delete
             $pasien->delete();
 
-        $data = [
-            'message' => 'Data pasien telah Dihapus',
-            'data' => $pasien
-        ];
+            //membuat poperty untuk mengirimkan pesan jika data berhasil dihapus
+            $data = [
+                'message' => 'Data pasien telah Dihapus',
+                'data' => $pasien
+            ];
 
-        return response()->json($data, 201);
+            return response()->json($data, 201);
         }
 
+        //kondisi jika data pasien yang dicari tidak ditemukan
         else{
             $data =[
                 'message' => 'Data pasien tidak ditemukan'
