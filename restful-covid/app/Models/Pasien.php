@@ -10,5 +10,6 @@ class Pasien extends Model
 {
     use HasFactory;
 
+    //membuat properti fillable yang digunakan untuk menambah data pada method post
     protected $fillable = ['name', 'phone', 'address', 'status', 'in_date_at', 'out_date_at'];
 }
