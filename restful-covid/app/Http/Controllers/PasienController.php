@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pasien;
 use Illuminate\Http\Request;
+// Use Illuminate\Validation\ValidationException;
 
 
 class PasienController extends Controller
@@ -50,18 +51,19 @@ class PasienController extends Controller
      #membuat method store untuk menambahkan data
     public function store(Request $request){
         
-        //membuat variable yang akan menampung data request
-        $input = [
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'status' => $request->status,
-            'in_date_at' => $request->in_date_at,
-            'out_date_at' => $request->out_date_at
-        ];
+        //membuat variable yang akan menampung data request sekaligus divalidasi
+
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'phone' => 'required|numeric',
+            'address' => 'required',
+            'status' => 'required|string',
+            'in_date_at' => 'required',
+            'out_date_at' => 'required'
+        ]);
         
         //membuat variable yang akan menggunakan method create yang berisikan inputan tadi
-        $pasiens = Pasien::create($input);
+        $pasiens = Pasien::create($validated);
 
         //membuat variable data yang akan berisi message dan data dari variabel pasien
         $data = [
